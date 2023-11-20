@@ -59,6 +59,7 @@ public class ProductController {
         productToUpdate.setDescription(product.getDescription());
         productToUpdate.setCode(product.getCode());
         productToUpdate.setUnitMeasurement(product.getUnitMeasurement());
+        productToUpdate.setBrand(product.getBrand());
         productToUpdate.setPrice(product.getPrice());
         productToUpdate.setStock(product.getStock());
         productToUpdate.setIdCategory(product.getIdCategory());

@@ -11,6 +11,7 @@ public class DetailProduct {
     private String name;
     private String description;
     private String code;
+    private String brand;
     private String unitMeasurement;
     private double price;
     private int stock;
@@ -22,6 +23,7 @@ public class DetailProduct {
         this.description = product.getDescription();
         this.code = product.getCode();
         this.unitMeasurement = product.getUnitMeasurement();
+        this.brand = product.getBrand();
         this.price = product.getPrice();
         this.stock = product.getStock();
         this.category = category;
