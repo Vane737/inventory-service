@@ -1,5 +1,6 @@
 package com.inventoryservice.apirest.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inventoryservice.apirest.model.Category;
 import com.inventoryservice.apirest.model.DetailProduct;
 import com.inventoryservice.apirest.model.Product;
+import com.inventoryservice.apirest.model.UpdateStockProduct;
 import com.inventoryservice.apirest.repository.CategoryRepository;
 import com.inventoryservice.apirest.repository.ProductRepository;
 
@@ -72,4 +74,75 @@ public class ProductController {
         return id;
     }
 
+    @PostMapping("/loadproducts")
+    public void cargarProductos(@RequestBody List<Product> products) {
+        productRepository.saveAll(products);
+    }
+
+    // @PutMapping("products/{id}/stock")
+    // Product updateProductStock(@PathVariable String id, @RequestBody int quantity) {
+    // Product productToUpdate = productRepository.findById(id).orElse(null);
+    // productToUpdate.setStock(productToUpdate.getStock() + quantity);
+    // return productRepository.save(productToUpdate);
+    // }
+
+    // @PutMapping("productos/{id}/stock")
+    // public Product updateStock(@PathVariable String id, @RequestBody ActualizarStockRequest request) {
+    //     // Obtener el producto de la base de datos
+    //     Product producto = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+    //     // Actualizar el stock según la operación (puede ser positivo para reposición o negativo para venta)
+    //     int nuevoStock = producto.getStock() + request.getCantidad();
+    //     if (nuevoStock < 0) {
+    //         throw new RuntimeException("No hay suficiente stock para la venta");
+    //     }
+
+    //     // Actualizar el stock en el objeto producto
+    //     producto.setStock(nuevoStock);
+
+    //     // Guardar el producto actualizado en la base de datos
+    //     return productRepository.save(producto);
+    // }
+    @PutMapping("products/{id}/stock")
+    public Product actualizarStock(@PathVariable String id, @RequestBody int cantidad) {
+        // Obtener el producto de la base de datos
+        Product producto = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+    
+        // Actualizar el stock según la operación (puede ser positivo para reposición o negativo para venta)
+        int nuevoStock = producto.getStock() + cantidad;
+        if (nuevoStock < 0) {
+            throw new RuntimeException("No hay suficiente stock para la venta");
+        }
+    
+        // Actualizar el stock en el objeto producto
+        producto.setStock(nuevoStock);
+    
+        // Guardar el producto actualizado en la base de datos
+        return productRepository.save(producto);
+    }
+
+    @PutMapping("productos/update-stocks")
+    public List<Product> actualizarStocks(@RequestBody List<UpdateStockProduct> updateProduct) {
+
+        List<Product> productosActualizados = new ArrayList<>();
+
+        for (UpdateStockProduct update : updateProduct) {
+            String idProducto = update.getIdProduct();
+            int cantidad = update.getQuantity();
+
+            Product product = productRepository.findById(idProducto)
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+            int nuevoStock = product.getStock() + cantidad;
+            if (nuevoStock < 0) {
+                throw new RuntimeException("No hay suficiente stock para la venta");
+            }
+
+            product.setStock(nuevoStock);
+            productosActualizados.add(productRepository.save(product));
+        }
+
+        return productosActualizados;
+    }
 }

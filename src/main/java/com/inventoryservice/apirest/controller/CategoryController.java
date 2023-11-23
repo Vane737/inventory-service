@@ -31,7 +31,7 @@ public class CategoryController {
         return categoryRepository.findAll();
     }
     
-    @GetMapping("categories/{id}")
+    @GetMapping("category/{id}")
     Category getCategoryById(@PathVariable String id) {
         return categoryRepository.findById(id).orElse(null);    
     }
@@ -41,7 +41,7 @@ public class CategoryController {
         return categoryRepository.save(category);
     }
 
-    @PutMapping("categories/{id}")
+    @PutMapping("category/{id}")
     Category updateCategory(@PathVariable String id, @RequestBody Category category) {
         Category categoryToUpdate = categoryRepository.findById(id).orElse(null);
         categoryToUpdate.setName(category.getName());
@@ -49,10 +49,15 @@ public class CategoryController {
         return categoryRepository.save(categoryToUpdate);
     }
 
-    @DeleteMapping("categories/{id}")
+    @DeleteMapping("category/{id}")
     String deleteCategory(@PathVariable String id) {
         categoryRepository.deleteById(id);
         return id;
+    }
+
+    @PostMapping("/loadcategories")
+    public void loadcategory(@RequestBody List<Category> categories) {
+        categoryRepository.saveAll(categories);
     }
 
 
