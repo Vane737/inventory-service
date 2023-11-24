@@ -36,7 +36,7 @@ public class CategoryController {
         return categoryRepository.findById(id).orElse(null);    
     }
 
-    @PostMapping("categories")
+    @PostMapping("category")
     Category setCategory(@RequestBody Category category) {
         return categoryRepository.save(category);
     }
@@ -55,8 +55,8 @@ public class CategoryController {
         return id;
     }
 
-    @PostMapping("/loadcategories")
-    public void loadcategory(@RequestBody List<Category> categories) {
+    @PostMapping("/load-categories")
+    public void loadcategories(@RequestBody List<Category> categories) {
         categoryRepository.saveAll(categories);
     }
 
